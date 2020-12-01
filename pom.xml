@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.training.catalyte</groupId>
-    <artifactId>not-defined-api</artifactId>
+    <artifactId>team-name-api</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Not Defined API</name>
+    <name>Team Name API</name>
     <description>E-Commerce backend for group project</description>
 
     <properties>

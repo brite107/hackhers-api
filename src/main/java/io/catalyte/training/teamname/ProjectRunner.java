@@ -1,4 +1,4 @@
-package io.catalyte.training.notdefined;
+package io.catalyte.training.teamname;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
