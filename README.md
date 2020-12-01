@@ -1,4 +1,4 @@
-# Not Defined API
+# Team Name API
 
-Back-end for the Not Defined group project team
+Back-end for the Team Name group project team
 
