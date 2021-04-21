@@ -1,6 +1,6 @@
 package io.catalyte.training.teamname;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ import org.junit.Test;
 public class ProjectRunnerTest {
 
   @Test
-  public void testStuff(){
+  public void testStuff() {
     assertTrue(true);
   }
 
