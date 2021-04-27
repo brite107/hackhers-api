@@ -32,8 +32,7 @@ public class AuthServiceImpl implements AuthService {
    * email and password given match the email and encoded password we have saved in our system. If
    * they match we are returned a jwt token. Otherwise, we throw a 400 Bad Request.
    *
-   * @param credentials - takes in a set of credentials which at this moment (4.19.21) is a
-   *                    preloaded user email and encoded password
+   * @param credentials - takes in a set of credentials which includes email and password fields
    * @return a jwt token
    */
   @Override
@@ -52,6 +51,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     String passwordOnFile = customer.getPassword();
+
+    if (!bCryptPasswordEncoder.matches(password, passwordOnFile)) {
+      throw new BadRequest(INVALID_EMAIL_PASSWORD);
+    }
 
     Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
     String jwtToken =
