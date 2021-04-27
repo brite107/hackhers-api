@@ -3,14 +3,13 @@ package io.catalyte.training.teamname.domains.customer;
 import io.catalyte.training.teamname.exceptions.ResourceNotFound;
 import io.catalyte.training.teamname.exceptions.ServiceUnavailable;
 import io.catalyte.training.teamname.exceptions.UniqueFieldViolation;
-import java.security.SecureRandom;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 /**
  * Implements CustomerService and performs the business logic required for CRUD operations on the
@@ -20,9 +19,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class CustomerServiceImpl implements CustomerService {
 
   private final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
-  @Autowired
+
   private CustomerRepo customerRepo;
-  private Customer customer;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+  @Autowired
+  public CustomerServiceImpl(CustomerRepo customerRepo,
+      BCryptPasswordEncoder bCryptPasswordEncoder) {
+    this.customerRepo = customerRepo;
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+  }
 
   /**
    * Retrieves Customers based on query filters
@@ -50,14 +56,23 @@ public class CustomerServiceImpl implements CustomerService {
    * @return The customer that was just added to the collection
    */
   public Customer addCustomer(Customer customer) {
-    if (customerRepo.existsByEmail(customer.getEmail())) {
-      throw new UniqueFieldViolation(customer.getEmail() + " already exists");
-    }
+    boolean emailAlreadyExists;
+
     try {
-      return customerRepo.save(customer);
+      // check if email already exists
+      emailAlreadyExists = customerRepo.existsByEmail(customer.getEmail());
+
+      if (!emailAlreadyExists) {
+        // encrypt password
+        customer.setPassword(bCryptPasswordEncoder.encode(customer.getPassword()));
+        return customerRepo.save(customer);
+      }
     } catch (Exception e) {
       throw new ServiceUnavailable(e);
     }
+
+    // if made it to this point, email is not unique
+    throw new UniqueFieldViolation("Email is already in use");
   }
 
   /**

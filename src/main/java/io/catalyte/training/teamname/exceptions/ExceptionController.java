@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionController {
 
   private final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
+
   /**
    * Catch validation errors triggered by using @Valid on parameters in controllers
    *
@@ -41,20 +42,20 @@ public class ExceptionController {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Object> handleValidationExceptions(
-          MethodArgumentNotValidException ex) {
-      List<String> errors = new ArrayList<>();
-      String method = ex.getParameter().getMethod().getName();
-      String controller = ex.getParameter().getDeclaringClass().getSimpleName();
-      ex.getBindingResult().getAllErrors().forEach((error) -> {
-        String errorMessage = error.getDefaultMessage();
-        errors.add( errorMessage );
-      });
+      MethodArgumentNotValidException ex) {
+    List<String> errors = new ArrayList<>();
+    String method = ex.getParameter().getMethod().getName();
+    String controller = ex.getParameter().getDeclaringClass().getSimpleName();
+    ex.getBindingResult().getAllErrors().forEach((error) -> {
+      String errorMessage = error.getDefaultMessage();
+      errors.add(errorMessage);
+    });
 
-      ValidationExceptionResponse response =
-              new ValidationExceptionResponse(VALIDATION_ERROR, new Date(),
-                      "One or more validation errors occurred in:" + controller + " : " + method, errors);
+    ValidationExceptionResponse response =
+        new ValidationExceptionResponse(VALIDATION_ERROR, new Date(),
+            "One or more validation errors occurred in:" + controller + " : " + method, errors);
 
-      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
   /**
@@ -84,7 +85,7 @@ public class ExceptionController {
   protected ResponseEntity<ExceptionResponse> resourceNotFound(BadDataResponse exception) {
 
     ExceptionResponse response =
-            new ExceptionResponse(BAD_DATA, new Date(), exception.getMessage());
+        new ExceptionResponse(BAD_DATA, new Date(), exception.getMessage());
 
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
@@ -93,8 +94,8 @@ public class ExceptionController {
    * Triggered when the ServiceUnavailable exception is thrown.
    *
    * @param ex the ServiceUnavailable exception containing the custom message.
-   * @return the ResponseEntity containing the custom exception and the status code 503
-   *  or 500 depending on the cause of the exception
+   * @return the ResponseEntity containing the custom exception and the status code 503 or 500
+   * depending on the cause of the exception
    */
 
   @ExceptionHandler(ServiceUnavailable.class)
@@ -106,22 +107,22 @@ public class ExceptionController {
     if (ex.getCause() instanceof JDBCException) {
       exceptionMessage = ((JDBCException) ex.getCause()).getSQLException().getMessage();
 
-      response =  new ExceptionResponse(SERVER_ERROR, new Date(), exceptionMessage);
+      response = new ExceptionResponse(SERVER_ERROR, new Date(), exceptionMessage);
       logger.error(exceptionMessage);
       return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
-    }
-    else //it's an unexpected error, throw a 500
+    } else //it's an unexpected error, throw a 500
     {
       exceptionMessage = "Error: " + exceptionMessage
-              + "   Class: " + ex.getStackTrace()[0].getClassName()
-              + "   Method: " + ex.getStackTrace()[0].getMethodName()
-              + "   Line: " + ex.getStackTrace()[0].getLineNumber();
-      response =  new ExceptionResponse(UNEXPECTED_ERROR, new Date(), exceptionMessage);
+          + "   Class: " + ex.getStackTrace()[0].getClassName()
+          + "   Method: " + ex.getStackTrace()[0].getMethodName()
+          + "   Line: " + ex.getStackTrace()[0].getLineNumber();
+      response = new ExceptionResponse(UNEXPECTED_ERROR, new Date(), exceptionMessage);
       logger.error(exceptionMessage);
       return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
   }
+
   /**
    * Triggered when the UniqueFieldViolation exception is thrown.
    *
