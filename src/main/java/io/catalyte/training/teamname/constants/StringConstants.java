@@ -28,5 +28,17 @@ public class StringConstants {
   public static final String CONFLICT = "Already exists in the database";
   public static final String BAD_DATA = "Bad Data";
   public static final String UNEXPECTED_ERROR = "Unexpected Server Error";
+
+  // end points
   public static final String CONTEXT_CUSTOMERS = "/customers";
+  public static final String CONTEXT_PRODUCTS = "/products";
+  public static final String ID_ENDPOINT = "/{id}";
+
+  // Microservice URLs
+  public static final String PRODUCT_API_CLASSIFICATION = "https://v2-product-search-service.herokuapp.com/v1/products/distinctValues/";
+  public static final String PRODUCT_API = "https://v2-product-search-service.herokuapp.com/v1/products";
+  public static final String IMAGE_API = "http://localhost:8081/images";
+
+  // images
+  public static final String DEFAULT_IMAGE = "https://www.tibs.org.tw/images/default.jpg";
 }
