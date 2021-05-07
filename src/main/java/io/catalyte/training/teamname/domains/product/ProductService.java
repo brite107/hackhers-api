@@ -1,6 +1,7 @@
 package io.catalyte.training.teamname.domains.product;
 
 import java.util.List;
+import reactor.core.publisher.Flux;
 
 public interface ProductService {
 
@@ -13,5 +14,7 @@ public interface ProductService {
       String pageSize,
 
       String pageNumber) throws Exception;
+
+  List<Product> getNewestProducts(String demographic) throws Exception;
 
 }

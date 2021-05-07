@@ -62,5 +62,19 @@ public class UrlBuilders {
     return sb.toString();
 
   }
+  public static String buildImageUrl(String baseUrl, String demographic) {
+    if (!demographic.equals("Men") && !demographic.equals("Women") && !demographic.equals("Kids")) {
+      return null;
+    }
+
+    StringBuilder sb = new StringBuilder();
+    sb.append(baseUrl);
+    sb.append("?demographic=");
+    sb.append(demographic);
+
+
+    return sb.toString();
+
+  }
 
 }

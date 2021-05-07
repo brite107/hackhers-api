@@ -9,9 +9,11 @@ import io.catalyte.training.teamname.exceptions.ServiceUnavailable;
 import io.catalyte.training.teamname.utils.UrlBuilders;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Flux;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -26,7 +28,8 @@ public class ProductServiceImpl implements ProductService {
   public List<Product> getProductsByQuery(String demographic, String category, String type,
       String pageSize, String pageNumber) throws Exception {
 
-    String path = UrlBuilders.buildProductUrl(PRODUCT_API, demographic, category, type, pageSize, pageNumber);
+    String path = UrlBuilders
+        .buildProductUrl(PRODUCT_API, demographic, category, type, pageSize, pageNumber);
     List<Product> products;
 
     try {
@@ -87,4 +90,68 @@ public class ProductServiceImpl implements ProductService {
     }
 
   }
+
+  /**
+   * Gets top 5 newest products from products searchs ervice
+   * @param demographic
+   * @return top 5 newest products
+   * @throws Exception
+   */
+  @Override
+  public List<Product> getNewestProducts(String demographic) throws Exception {
+    StringBuilder sb = new StringBuilder();
+    sb.append(PRODUCT_API);
+    sb.append("/types/newest?demographic=");
+    sb.append(demographic);
+    String path = sb.toString();
+    List<Product> products;
+    try {
+      // get the products from the product search service
+      // An object is returned from the product search service which contains the list
+      // of products as one of its properties (content)
+      products = webClientBuilder.build()
+          .get()
+          .uri(path)
+          .retrieve()
+          .bodyToMono(new ParameterizedTypeReference<List<Product>>() {
+          })
+          .block();
+
+      // get a list of images that match the same criteria (currently we only have one image for each
+      // demographic/type pairing)
+      List<Image> images = imageService
+          .getImagesByQuery(demographic);
+      if (images.size() == 0) {
+        for (int i = 0; i < products.size(); i++) {
+          products.get(i).setImageUrl(DEFAULT_IMAGE);
+        }
+      } else {
+        // this will be when we query by demographic only, as there are 29 images per demographic
+        // outer loop is for each product
+        for (int i = 0; i < products.size(); i++) {
+          // match an image to a product based on whether the type or category matches
+          // inner loop goes through the images looking for a match in type or category
+          for (int j = 0; j < images.size(); j++) {
+            if (images.get(j).getType() != null) {
+              if (products.get(i).getType().equals(images.get(j).getType())) {
+                products.get(i).setImageUrl(images.get(j).getImageUrl());
+                break;
+              }
+            } else if (images.get(j).getCategory() != null) {
+              if (products.get(i).getCategory().equals(images.get(j).getCategory())) {
+                products.get(i).setImageUrl(images.get(j).getImageUrl());
+                break;
+              }
+            }
+          }
+        }
+      }
+      return products;
+    } catch (
+        WebClientResponseException e) {
+      throw new ServiceUnavailable(e.getMessage());
+    }
+
+  }
 }
+

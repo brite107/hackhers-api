@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 /**
  * Holds GET method to query product search service
@@ -51,4 +52,15 @@ public class ProductController {
         HttpStatus.OK);
   }
 
+  /**
+   * Calls the service to get top 5 newest products
+   * @param demographic
+   * @return top 5 newest products
+   * @throws Exception
+   */
+  @GetMapping("/newest")
+  public ResponseEntity<List<Product>> getNewestProducts(@RequestParam String demographic) throws Exception {
+    return new ResponseEntity<>(
+        productService.getNewestProducts(demographic), HttpStatus.OK);
+  }
 }
