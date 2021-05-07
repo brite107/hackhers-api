@@ -47,4 +47,24 @@ public class ImageServiceImpl implements ImageService {
     }
 
   }
+
+  public List<Image> getImagesByQuery(String demographic)
+      throws Exception {
+
+    String path = UrlBuilders.buildImageUrl(IMAGE_API, demographic);
+
+    try {
+      List<Image> images = webClientBuilder.build()
+          .get()
+          .uri(path)
+          .retrieve()
+          .bodyToMono(new ParameterizedTypeReference<List<Image>>() {
+          })
+          .block();
+      return images;
+    } catch (WebClientResponseException e) {
+      throw new ServiceUnavailable(e.getMessage());
+    }
+
+  }
 }

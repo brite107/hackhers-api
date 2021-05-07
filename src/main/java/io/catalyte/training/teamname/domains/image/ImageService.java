@@ -10,4 +10,6 @@ public interface ImageService {
 
       String type) throws Exception;
 
+  List<Image> getImagesByQuery(String demographic) throws Exception;
+
 }
