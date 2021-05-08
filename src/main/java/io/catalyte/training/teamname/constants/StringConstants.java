@@ -28,7 +28,9 @@ public class StringConstants {
   public static final String CONFLICT = "Already exists in the database";
   public static final String BAD_DATA = "Bad Data";
   public static final String UNEXPECTED_ERROR = "Unexpected Server Error";
-
+  public static final String BAD_REQUEST_ID = "The id of the request body's entity must match the id of the path parameter";
+  public static final String EMAIL_CONFLICT = "Email is already in use";
+  public static final String BAD_REQUEST_CUSTOMER_NOT_FOUND = "The customer does not exist in the database";
   // end points
   public static final String CONTEXT_CUSTOMERS = "/customers";
   public static final String CONTEXT_PRODUCTS = "/products";
