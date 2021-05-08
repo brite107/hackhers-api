@@ -14,5 +14,7 @@ public interface CustomerService {
 
   Customer findByEmail(String email);
 
+  Customer updateCustomerById(Long id, Customer customer);
+
 }
 

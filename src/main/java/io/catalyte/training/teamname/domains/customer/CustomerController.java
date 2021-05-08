@@ -1,6 +1,9 @@
 package io.catalyte.training.teamname.domains.customer;
 
+import io.catalyte.training.teamname.exceptions.BadDataResponse;
+import io.catalyte.training.teamname.exceptions.ResourceNotFound;
 import io.catalyte.training.teamname.exceptions.ServiceUnavailable;
+import io.catalyte.training.teamname.exceptions.UniqueFieldViolation;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -16,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,5 +88,26 @@ public class CustomerController {
     return new ResponseEntity<>(customerService.findByEmail(email), HttpStatus.OK);
   }
 
+  /**
+   * Calls the service to update a customer with a given Id
+   * @param id the Id of the customer to be updated
+   * @param customer the customer object with the complete customer information, including the
+   *                 updated fields.
+   * @return ResponseEntity with the updated customer information and HTTP status 200 (OK)
+   */
+  @PutMapping(value = "/{id}")
+  @ApiOperation("Update a customer by id")
+  @ApiResponses(value = {
+      @ApiResponse(code = 201, message = "CREATED", response = Customer.class),
+      @ApiResponse(code = 409, message = "CONFLICT", response = UniqueFieldViolation.class),
+      @ApiResponse(code = 400, message = "BAD DATA", response = BadDataResponse.class),
+      @ApiResponse(code = 404, message = "NOT FOUND", response = ResourceNotFound.class)
+  })
+  public ResponseEntity<Customer> updateCustomerById(
+      @PathVariable Long id, @Valid @RequestBody Customer customer) {
+    logger.info(new Date() + " Update request received for id: " + id);
+
+    return new ResponseEntity<>(customerService.updateCustomerById(id, customer), HttpStatus.OK);
+  }
 
 }

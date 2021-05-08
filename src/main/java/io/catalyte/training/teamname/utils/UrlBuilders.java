@@ -2,7 +2,7 @@ package io.catalyte.training.teamname.utils;
 
 public class UrlBuilders {
 
-  public static final String DEFAULT_PAGING = "&pageSize=20&pageNumber=0";
+  public static final String DEFAULT_PAGING = "&pageSize=21&pageNumber=0";
 
   public static String buildProductUrl(String baseUrl, String demographic, String category,
       String type, String pageSize, String pageNumber) {

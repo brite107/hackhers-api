@@ -50,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers(AUTH_WHITELIST).permitAll()
         .antMatchers(HttpMethod.POST, "/customers").permitAll()
+        .antMatchers(HttpMethod.GET, "/customers/**").permitAll()
+        .antMatchers(HttpMethod.PUT, "/customers").permitAll()
         .antMatchers(HttpMethod.GET, "/products").permitAll()
         .and()
         .sessionManagement().disable()
@@ -60,7 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public void configure(WebSecurity web) {
     web.ignoring().antMatchers(HttpMethod.OPTIONS);
     web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
-        "/configuration/security", "/swagger-ui.html", "/webjars/**", "/login", "/customers", "/products/**");
+        "/configuration/security", "/swagger-ui.html", "/webjars/**", "/login", "/customers",
+        "/products/**");
   }
 
 }
