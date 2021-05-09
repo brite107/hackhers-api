@@ -1,6 +1,7 @@
 package io.catalyte.training.teamname.domains.image;
 
-import static io.catalyte.training.teamname.constants.StringConstants.IMAGE_API;
+import static io.catalyte.training.teamname.constants.StringConstants.IMAGE_API_BASEURL;
+import static io.catalyte.training.teamname.constants.StringConstants.IMAGES_ENDPOINT;
 
 import io.catalyte.training.teamname.exceptions.ServiceUnavailable;
 import io.catalyte.training.teamname.utils.UrlBuilders;
@@ -30,8 +31,11 @@ public class ImageServiceImpl implements ImageService {
   @Override
   public List<Image> getImagesByQuery(String demographic, String category, String type)
       throws Exception {
-
-    String path = UrlBuilders.buildImageUrl(IMAGE_API, demographic, category, type);
+    StringBuilder sb = new StringBuilder();
+    sb.append(IMAGE_API_BASEURL);
+    sb.append(IMAGES_ENDPOINT);
+    String baseUrl = sb.toString();
+    String path = UrlBuilders.buildImageUrl(baseUrl, demographic, category, type);
 
     try {
       List<Image> images = webClientBuilder.build()
@@ -50,8 +54,11 @@ public class ImageServiceImpl implements ImageService {
 
   public List<Image> getImagesByQuery(String demographic)
       throws Exception {
-
-    String path = UrlBuilders.buildImageUrl(IMAGE_API, demographic);
+    StringBuilder sb = new StringBuilder();
+    sb.append(IMAGE_API_BASEURL);
+    sb.append(IMAGES_ENDPOINT);
+    String baseUrl = sb.toString();
+    String path = UrlBuilders.buildImageUrl(baseUrl, demographic);
 
     try {
       List<Image> images = webClientBuilder.build()

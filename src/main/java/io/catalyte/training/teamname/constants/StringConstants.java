@@ -39,7 +39,10 @@ public class StringConstants {
   // Microservice URLs
   public static final String PRODUCT_API_CLASSIFICATION = "https://v2-product-search-service.herokuapp.com/v1/products/distinctValues/";
   public static final String PRODUCT_API = "https://v2-product-search-service.herokuapp.com/v1/products";
-  public static final String IMAGE_API = "http://localhost:8081/images";
+//  public static final String IMAGE_API = "http://localhost:8081/images";
+  public static final String IMAGE_API_BASEURL = "https://hackhers-image-service.herokuapp.com";
+  public static final String IMAGES_ENDPOINT = "/images";
+
 
   // images
   public static final String DEFAULT_IMAGE = "https://www.tibs.org.tw/images/default.jpg";
