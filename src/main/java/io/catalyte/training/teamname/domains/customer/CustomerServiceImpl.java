@@ -141,6 +141,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         // only continue if email has not changed, or new email is unique
         if (emailIsSame || newEmailIsUnique) {
+          // encrypt password
+          customer.setPassword(bCryptPasswordEncoder.encode(customer.getPassword()));
           return customerRepo.save(customer);
         }
       }
