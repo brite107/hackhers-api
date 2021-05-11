@@ -3,6 +3,8 @@ package io.catalyte.training.teamname.utils;
 public class UrlBuilders {
 
   public static final String DEFAULT_PAGING = "&pageSize=21&pageNumber=0";
+  public static final String DEFAULT_PAGE_SIZE = "&pageSize=21";
+  public static final String DEFAULT_PAGE_NUMBER = "&pageNumber=0";
 
   public static String buildProductUrl(String baseUrl, String demographic, String category,
       String type, String pageSize, String pageNumber) {
@@ -25,13 +27,18 @@ public class UrlBuilders {
       sb.append(type);
     }
 
-    if (pageSize == null || pageNumber == null) {
-      sb.append(DEFAULT_PAGING);
-    } else {
+    if (pageSize != null && pageSize != "") {
       sb.append("&pageSize=");
       sb.append(pageSize);
+    } else {
+      sb.append(DEFAULT_PAGE_SIZE);
+    }
+
+    if (pageNumber != null && pageNumber != "") {
       sb.append("&pageNumber=");
       sb.append(pageNumber);
+    } else {
+      sb.append(DEFAULT_PAGE_NUMBER);
     }
 
     return sb.toString();
